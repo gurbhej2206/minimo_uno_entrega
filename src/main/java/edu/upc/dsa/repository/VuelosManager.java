@@ -1,31 +1,30 @@
 package edu.upc.dsa.repository;
 
-import edu.upc.dsa.models.Piloto;
-import edu.upc.dsa.models.Dron;
-import edu.upc.dsa.models.Reserva;
+import edu.upc.dsa.exceptions.*;
+import edu.upc.dsa.models.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Date;
 
 public interface VuelosManager {
 
-    Piloto addPiloto(String id, String nombre, String apellido);
+    Piloto addPiloto(String id, String nombre, String apellido) throws InvalidIDException;
 
-    Dron addDron(String id, String nombre, String fabricante, String modelo);
+    Dron addDron(String id, String nombre, String fabricante, String modelo) throws InvalidIDException;
 
     List<Piloto> ordPilotosHorasVuelo();
 
     List<Dron> ordDronesHorasVuelo();
 
-    void dronAlmacen(String idDron);
+    void dronAlmacen(String idDron) throws DronMantenimientoException;
 
-    Dron almacenReparar();
+    Dron almacenReparar() throws EmptyAlmacenException;
 
-    void addReserva(String idPiloto, String idDron, Date fecha, int duracion, String posIn, String posDst);
+    void addReserva(double duracion, List<Coordenada> trayecto, LocalDateTime fechaIn, String idPiloto, String idDron) throws InvalidIDException, ReservaIntervaloException;
 
-    List<Reserva> listReservasPiloto(String idPiloto);
+    List<Reserva> listReservasPiloto(String idPiloto) throws InvalidIDException;
 
-    List<Reserva> listReservasDron(String idDron);
+    List<Reserva> listReservasDron(String idDron) throws InvalidIDException;
 
     int getNum();
 }

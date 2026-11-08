@@ -1,10 +1,8 @@
 package edu.upc.dsa.services;
 
-import edu.upc.dsa.repository.VuelosManager;
-import edu.upc.dsa.repository.VuelosManagerImpl;
-import edu.upc.dsa.models.Dron;
-import edu.upc.dsa.models.Piloto;
-import edu.upc.dsa.models.Reserva;
+import edu.upc.dsa.exceptions.*;
+import edu.upc.dsa.models.*;
+import edu.upc.dsa.repository.*;
 
 
 import io.swagger.annotations.Api;
@@ -16,7 +14,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
 
 @Api(value = "/vuelos", description = "Endpoint to Manage Vuelos")
@@ -25,7 +22,7 @@ public class VuelosService {
     
     private VuelosManager vm;
 
-    public VuelosService() {
+    public VuelosService() throws InvalidIDException {
         this.vm = VuelosManagerImpl.getInstance();
         if(vm.getNum() == 0) {
 
@@ -53,7 +50,7 @@ public class VuelosService {
     @GET
     @ApiOperation(value = "Get Pilotos sorted by horasVuelo", notes = "")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Piloto.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "Successful", response = Piloto.class, responseContainer="List"),
     })
     @Path("/pilotosByHorasVuelo")
     @Produces(MediaType.APPLICATION_JSON)
@@ -68,7 +65,7 @@ public class VuelosService {
     @GET
     @ApiOperation(value = "Get Drones sorted by horasVuelo", notes = "")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Dron.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "Successful", response = Dron.class, responseContainer="List"),
     })
     @Path("/dronesByHorasVuelo")
     @Produces(MediaType.APPLICATION_JSON)
@@ -87,7 +84,7 @@ public class VuelosService {
             @ApiResponse(code = 500, message = "Validation Error")
     })
     @Path("/addPilot/{idPiloto}/{nombre}/{apellidos}")
-    public Response addPiloto(@PathParam("idPiloto") String idPiloto, @PathParam("nombre") String nombre, @PathParam("apellidos") String apellidos) {
+    public Response addPiloto(@PathParam("idPiloto") String idPiloto, @PathParam("nombre") String nombre, @PathParam("apellidos") String apellidos) throws InvalidIDException {
         Piloto newPiloto = vm.addPiloto(idPiloto, nombre, apellidos);
         return Response.status(201).entity(newPiloto).build();
     }
@@ -101,7 +98,7 @@ public class VuelosService {
             @ApiResponse(code = 500, message = "Validation Error")
     })
     @Path("/addDron/{idDron}/{nombre}/{fabricante}/{modelo}")
-    public Response addDron(@PathParam("idDron") String idDron, @PathParam("nombre") String nombre, @PathParam("fabricante") String fabricante, @PathParam("modelo") String modelo)  {
+    public Response addDron(@PathParam("idDron") String idDron, @PathParam("nombre") String nombre, @PathParam("fabricante") String fabricante, @PathParam("modelo") String modelo) throws InvalidIDException  {
         Dron newDron = vm.addDron(idDron, nombre, fabricante, modelo);
         return Response.status(201).entity(newDron).build();
     }
