@@ -98,6 +98,6 @@ public class VuelosManagerTest {
         List<Coordenada> trayecto2 = Arrays.asList(new Coordenada(5, 6), new Coordenada(10, 3));
         LocalDateTime fechaIn2 = LocalDateTime.of(2026, 11, 7, 21, 0);
 
-        assertThrows(ReservaIntervaloException.class, () -> vm.addReserva(3, trayecto, fechaIn2, "P4", "D1"));
+        assertThrows(ReservaIntervaloException.class, () -> vm.addReserva(3, trayecto2, fechaIn2, "P4", "D1"));
     }
 }
